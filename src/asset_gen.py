@@ -50,15 +50,17 @@ def getListOfFiles(dirName, parent):
 
 filesCode = list(map(fileDecor, getListOfFiles(fullPath, assetPath)))
 
+className = assetPath.capitalize()
+
 CODE_TEMPLATE = [
-"class Assets {\n",
+f"class {className} "+ "{\n",
 *filesCode,
 "}\n"
 ]
 
 GENERATED_CODE = "".join(CODE_TEMPLATE)
 
-writePath = dirpath + "\\lib\\constants\\assets.dart"
+writePath = dirpath + f"\\lib\\constants\\{assetPath}.dart"
 
 if not os.path.exists(os.path.dirname(writePath)):
     try:
@@ -66,7 +68,7 @@ if not os.path.exists(os.path.dirname(writePath)):
     except OSError as exc: # Guard against
         if exc.errno != errno.EEXIST:
             raise
-with open(dirpath + "\\lib\\constants\\assets.dart", "w") as fp:
+with open(writePath, "w") as fp:
     fp.write(GENERATED_CODE)
 
 print("==== GENERATION SUCCESS =====")
